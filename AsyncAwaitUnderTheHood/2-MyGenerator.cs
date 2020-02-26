@@ -6,14 +6,28 @@ namespace AsyncAwaitUnderTheHood
 {
     public class MyGenerator : IEnumerable<int>
     {
+        private readonly int _stopAt;
+
+        public MyGenerator(int stopAt)
+        {
+            _stopAt = stopAt;
+        }
+
         public class MyEnumerator : IEnumerator<int>
         {
+            private MyGenerator _generator;
+
+            public MyEnumerator(MyGenerator generator)
+            {
+                _generator = generator;
+            }
+            
             public int Current { get; private set; } = -1;
             object IEnumerator.Current => Current;
 
             public bool MoveNext()
             {
-                if (Current == 9)
+                if (Current == _generator._stopAt)
                 {
                     return false;
                 }
@@ -39,12 +53,12 @@ namespace AsyncAwaitUnderTheHood
         
         public IEnumerator<int> GetEnumerator()
         {
-            return new MyEnumerator();
+            return new MyEnumerator(this);
         }
         
         public static void Test()
         {
-            var generator = new MyGenerator();
+            var generator = new MyGenerator(stopAt: 9);
 
             foreach (var item in generator)
             {

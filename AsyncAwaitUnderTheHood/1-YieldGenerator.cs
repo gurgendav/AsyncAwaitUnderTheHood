@@ -6,13 +6,13 @@ namespace AsyncAwaitUnderTheHood
 {
     public class YieldGenerator
     {
-        public IEnumerable<int> GetSequence()
+        public IEnumerable<int> GetSequence(int stopAt)
         {
-            var current = -1;
-            while (current != 9)
+            var i = -1;
+            while (i != stopAt)
             {
-                current++;
-                yield return current;
+                i++;
+                yield return i;
             }
         }
         
@@ -20,7 +20,7 @@ namespace AsyncAwaitUnderTheHood
         {
             var generator = new YieldGenerator();
 
-            foreach (var item in generator.GetSequence())
+            foreach (var item in generator.GetSequence(stopAt: 9))
             {
                 Console.WriteLine($"Current Item: {item}");
             }
